@@ -1,6 +1,7 @@
 import mongoose, { ObjectId } from "mongoose";
+import { IUser } from "../types/userTypes.js";
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema<IUser>(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -10,4 +11,7 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const UserModel = mongoose.model("User", UserSchema);
+export const UserModel = mongoose.model<IUser & mongoose.Document>(
+  "User",
+  UserSchema
+);
