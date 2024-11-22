@@ -141,7 +141,7 @@ app.patch("/update-profile", authMiddleware, async (req, res): Promise<any> => {
     }
 
     const updatedUser = await UserModel.findByIdAndUpdate(
-      req.user?._id,
+      req.user?.id,
       updateData,
       { new: true }
     );

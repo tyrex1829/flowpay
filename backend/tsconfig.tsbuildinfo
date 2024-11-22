@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/models/userModel.ts"],"version":"5.6.3"}
+{"root":["./src/custom.d.ts","./src/index.ts","./src/middlewares/authMiddleware.ts","./src/models/userModel.ts","./src/types/userTypes.ts"],"version":"5.6.3"}
