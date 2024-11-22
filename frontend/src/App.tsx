@@ -6,7 +6,7 @@ function App() {
 
   return (
     <>
-      <h1>Test React fronted for flowpay</h1>
+      <h1 className="text-3xl underline">Test React fronted for flowpay</h1>
     </>
   );
 }
