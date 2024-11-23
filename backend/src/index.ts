@@ -24,7 +24,7 @@ connection.on("error", () => {
 });
 
 connection.on("connected", () => {
-  console.error(`Connected to MongoDB`);
+  console.log(`Connected to MongoDB`);
 });
 
 app.use(express.json());
