@@ -128,3 +128,30 @@ export const updateInfoUser = async (
       .json({ message: "Can't update info right now, please try again" });
   }
 };
+
+export const filteredUser = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
+  const { filter } = req.query;
+
+  const getUsers = await UserModel.find({
+    $or: [
+      {
+        firstName: { $regex: filter },
+      },
+      {
+        lastName: { $regex: filter },
+      },
+    ],
+  });
+
+  res.json({
+    user: getUsers.map((user) => ({
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      _id: user._id,
+    })),
+  });
+};
