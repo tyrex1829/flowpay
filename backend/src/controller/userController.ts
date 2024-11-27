@@ -2,33 +2,34 @@ import { Request, Response } from "express";
 import { UserModel } from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../config/env.js";
+import { JWT_SECRET, NODE_ENV } from "../config/env.js";
 
 export const signupUser = async (req: Request, res: Response): Promise<any> => {
-  const { firstName, lastName, email, password } = req.body;
+  const { email, password, username } = req.body;
 
-  if (!firstName || !lastName || !email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
+  if (!email || !password || !username) {
+    return res.status(400).json({ message: "Validation errors" });
   }
 
   try {
-    const existingUser = await UserModel.findOne({ email });
+    const existingUser = await UserModel.findOne({ email, username });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res
+        .status(409)
+        .json({ message: "Username or email already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new UserModel({
-      firstName,
-      lastName,
       email,
       password: hashedPassword,
+      username,
     });
 
     await user.save();
 
-    res.status(200).json({ message: "User created successfully" });
+    res.status(201).json({ message: "User successfully registered" });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -66,15 +67,27 @@ export const signinUser = async (req: Request, res: Response): Promise<any> => {
     const token = jwt.sign(
       {
         email: isUserPresent.email,
+        username: isUserPresent.username,
         id: isUserPresent._id,
       },
       JWT_SECRET
     );
 
-    return res.status(200).json({
-      message: `Login successful`,
-      token,
-    });
+    return res
+      .cookie("auth_token", token, {
+        httpOnly: true,
+        secure: NODE_ENV === "production",
+        sameSite: "strict",
+      })
+      .status(200)
+      .json({
+        access_token: token,
+        user: {
+          id: isUserPresent._id,
+          username: isUserPresent.username,
+          email: isUserPresent.email,
+        },
+      });
   } catch (error) {
     res.status(400).json({
       message: `Can't login right now, please try again`,
@@ -149,8 +162,7 @@ export const filteredUser = async (
   res.json({
     user: getUsers.map((user) => ({
       email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      username: user.username,
       _id: user._id,
     })),
   });
