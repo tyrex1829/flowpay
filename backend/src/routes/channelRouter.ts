@@ -1,9 +1,13 @@
 import express from "express";
-import { createChannel } from "../controller/createChannelController.js";
+import {
+  createChannel,
+  getChannel,
+} from "../controller/channelController.ts.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 router.post("/", authMiddleware, createChannel);
+router.get("/:slug", authMiddleware, getChannel);
 
 export default router;
