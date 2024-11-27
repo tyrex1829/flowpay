@@ -5,4 +5,5 @@ export interface Channel extends Document {
   description: string;
   slug: string;
   user: ObjectId;
+  subscriber_count: number;
 }
