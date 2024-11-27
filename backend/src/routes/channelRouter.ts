@@ -1,8 +1,5 @@
 import express from "express";
-import {
-  createChannel,
-  getChannel,
-} from "../controller/channelController.ts.js";
+import { createChannel, getChannel } from "../controller/channelController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
