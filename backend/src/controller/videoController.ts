@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
 import { VideoModel } from "../models/videoModel.js";
+import multer from "multer";
+
+const upload = multer({ dest: "uploads/" });
 
 export const getFeed = async (req: Request, res: Response): Promise<any> => {
   try {
@@ -33,3 +36,14 @@ export const getFeed = async (req: Request, res: Response): Promise<any> => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const uploadVideo = async (req: Request, res: Response) => {
+  const { file, title, description, category } = req.body;
+
+  try {
+  } catch (error) {}
+};
+
+export const getVideoDetails = async (req: Request, res: Response) => {};
+
+export const updateTimestamp = async (req: Request, res: Response) => {};

@@ -9,6 +9,11 @@ const VideoSchema = new mongoose.Schema<Video>(
       id: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
       username: { type: String, required: true },
     },
+    channel: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "channel",
+      required: true,
+    },
     view_count: { type: Number, default: 0, required: true },
   },
   { timestamps: true }
